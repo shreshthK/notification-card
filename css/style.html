@@ -2,13 +2,14 @@
     <template>
         <style>
             .notification-container {
+                width: 100%;
                 margin: 0 auto;
-                float: left;
             }
 
             .notification-cards {
                 display: -webkit-flex;
                 display: flex;
+                float: left;
                 -webkit-justify-content: center;
                 justify-content: center;
                 -webkit-flex-wrap: wrap;
@@ -46,17 +47,8 @@
                     margin-right: 20px;
                     margin-bottom: 20px;
                 }
-                .notification-card:nth-child(even) {
-                    margin-right: 0;
-                }
             }
             @media (min-width: 980px) {
-                .notification-card:nth-child(even) {
-                    margin-right: 20px;
-                }
-                .notification-card:nth-child(3n) {
-                    margin-right: 0;
-                }
             }
             .notification-card span {
                 display: block;
