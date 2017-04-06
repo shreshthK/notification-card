@@ -1,0 +1,147 @@
+<!-- Imports polymer -->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="css/style.html">
+
+<!-- Defines element markup -->
+<dom-module id="scc-notification">
+    <template>
+        <style include="notification-styles"></style>
+        <template is="dom-if" if="{{messages.length>0}}">
+            <div class="notification-container">
+                <div class="notification-cards">
+                    <template is="dom-repeat" items="{{messages}}" as="message" index-as="index">
+                        <template is="dom-if" if="{{_getDate(message.validUpto)}}">
+                            <a class="notification-card" href="#">
+                                <span class="notification-card-header"
+                                      style="background-image: url(./image/announce.png);">
+                                    <span class="notification-card-title">
+                                        <h3>{{message.role}} - {{message.title}}</h3>
+                                    </span>
+                                </span>
+                                <span class="notification-card-summary">
+                                    {{message.message}}
+                                </span>
+                                <span class="notification-card-meta">
+                                    Valid Upto: {{_getDateString(message.validUpto)}}
+                                </span>
+                            </a>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </template>
+
+    <!-- Registers custom element -->
+    <script>
+        Polymer({
+            is: 'scc-notification',
+
+            properties: {
+                apiEndPoint: {
+                    type: String,
+                    observer: '_getMessage'
+                },
+                timeOut: {
+                    type: Number,
+                    value: 180000
+                },
+                messages: {
+                    type: Object,
+                    value: []
+                }
+            },
+
+            // Fires when an instance of the element is created
+            created: function () {
+            },
+
+            // Fires when the local DOM has been fully prepared
+            ready: function () {
+            },
+
+            // Fires when the element was inserted into the document
+            attached: function () {
+            },
+
+            // Fires when the element was removed from the document
+            detached: function () {
+                this.cancelAsync(this.asyncHandleForRole);
+            },
+            // Fires when an attribute was added, removed, or updated
+            attributeChanged: function (name, type) {
+            },
+            /**
+             *
+             * @param message object
+             * @returns {*}
+             * @private
+             */
+            _getStatusClasses: function (message) {
+                if (message.role === 'PUBLIC') {
+                    return 'notification-div display-inline-block yellow-class';
+                }
+                else {
+                    return 'notification-div display-inline-block green-class';
+                }
+            },
+
+            /**
+             *
+             * @private
+             */
+            _getMessage: function () {
+                this._makeAPICall();
+                this.asyncHandleForRole = this.async(this._getMessage, this.timeOut);
+            },
+
+            /**
+             *
+             * @private
+             */
+            _makeAPICall: function () {
+                var self = this,
+                    xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState === 4) {
+                        if (xmlhttp.status === 200) {
+                            self.messages = JSON.parse(xmlhttp.response).data;
+                        }
+                    }
+                };
+                xmlhttp.open('GET', this.apiEndPoint, true);
+                xmlhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+                xmlhttp.send();
+            },
+
+            /**
+             *
+             * @returns current EPOCH time
+             */
+            _getDate: function (validUpto) {
+                var today = new Date();
+                return (parseInt(validUpto) > today.getTime());
+            },
+            _getDateString: function (validUpto) {
+                var today = new Date(parseInt(validUpto));
+
+                var dd = today.getUTCDate(),
+                    mm = today.getUTCMonth() + 1, //January is 0!
+                    yyyy = today.getUTCFullYear(),
+                    dateString;
+
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+                dateString = mm + '-' + dd + '-' + yyyy;
+                console.log(dateString);
+                return dateString;
+            }
+
+        });
+    </script>
+</dom-module>
+
