@@ -2,15 +2,13 @@
     <template>
         <style>
             .notification-container {
-                max-width: 1100px;
                 margin: 0 auto;
-                width: 100%;
+                float: left;
             }
 
             .notification-cards {
                 display: -webkit-flex;
                 display: flex;
-                float: left;
                 -webkit-justify-content: center;
                 justify-content: center;
                 -webkit-flex-wrap: wrap;
@@ -24,6 +22,7 @@
 
             .notification-card {
                 position: relative;
+                min-width: 250px;
                 margin-bottom: 20px;
                 padding-bottom: 30px;
                 background: #fefff9;
@@ -92,7 +91,7 @@
                 width: 100%;
             }
             .notification-card .notification-card-title h3 {
-                font-size: 0.8em;
+                font-size: 1.2em;
                 line-height: 1.2;
                 padding: 0 3.5%;
                 margin: 0;
@@ -125,7 +124,7 @@
                 -webkit-box-shadow: rgba(0, 0, 0, 0.45) 0px 0px 20px 0px;
                 box-shadow: rgba(0, 0, 0, 0.45) 0px 0px 20px 0px;
             }
-            .notification-card:hover .notification-card-title, .notification-card:focus .notification-card-title {
+            .notification-card:hover .notification-card-title, .notification-card:focus .card-title {
                 background: rgba(157, 187, 63, 0.95);
             }
             .notification-card:hover .notification-card-meta, .notification-card:focus .card-meta {
@@ -135,6 +134,7 @@
             img {
                 max-width: 100%;
             }
+
         </style>
     </template>
 </dom-module>
